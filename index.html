@@ -1,0 +1,378 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover"
+    />
+    <meta
+      name="description"
+      content="古いカートゥーン映画のような、オリジナル落ち物パズルゲーム『手鳥州』"
+    />
+    <meta name="theme-color" content="#ead9b8" />
+    <title>手鳥州</title>
+  </head>
+  <body class="title-open">
+    <div class="film-grain" aria-hidden="true"></div>
+
+    <section class="title-screen" id="titleScreen" aria-labelledby="titleScreenName">
+      <div class="title-card">
+        <div class="title-audio-tools">
+          <details class="music-menu music-menu--title" data-music-menu>
+            <summary aria-label="BGMを選ぶ">伴奏 ♪</summary>
+            <div class="music-popover">
+              <p class="music-heading">ジェームスの伴奏盤</p>
+              <label class="music-field">
+                <span>楽曲</span>
+                <select data-bgm-select aria-label="BGMの楽曲"></select>
+              </label>
+              <label class="music-field music-volume">
+                <span>音量 <output data-bgm-volume-value>34</output></span>
+                <input
+                  type="range"
+                  min="0"
+                  max="100"
+                  step="1"
+                  value="34"
+                  data-bgm-volume
+                  aria-label="BGMの音量"
+                />
+              </label>
+              <div class="music-buttons">
+                <button type="button" data-bgm-toggle aria-pressed="false">
+                  <span data-bgm-toggle-label>伴奏を休む</span>
+                </button>
+                <button type="button" data-bgm-file>手持ち曲</button>
+              </div>
+              <p class="music-now" data-bgm-now>上映開始で再生します</p>
+            </div>
+          </details>
+          <button
+            class="sound-toggle"
+            type="button"
+            data-sound-toggle
+            aria-pressed="false"
+            aria-label="音を消す"
+          >
+            音響 <span data-sound-state>あり</span><span class="sound-key">M</span>
+          </button>
+        </div>
+
+        <div class="title-copy">
+          <p class="title-kicker">ジェームス映写室・今夜の上映</p>
+          <h1 id="titleScreenName">手鳥州</h1>
+          <p class="title-roman">TE・TO・RI・SU</p>
+          <p class="title-lead">
+            積んで、揃えて、幕が上がる。<br />映写技師と小さな客人がお待ちです。
+          </p>
+        </div>
+
+        <figure class="title-portrait">
+          <img
+            src="./assets/concepts/james-with-squirrel.png"
+            alt="左手にリスを乗せた映写技師ジェームス"
+          />
+          <figcaption>映写技師ジェームスと小さな客人</figcaption>
+        </figure>
+
+        <div class="title-action">
+          <button class="start-button" id="startButton" type="button">
+            上映を始める <span>ENTER</span>
+          </button>
+          <p>最高得点 <strong id="titleBestScore">000000</strong></p>
+        </div>
+      </div>
+    </section>
+
+    <main class="app-shell">
+      <header class="game-header">
+        <div class="brand-lockup">
+          <div class="counsel-mouse" role="img" aria-label="映写技師ジェームス">
+            <span class="mouse-ear mouse-ear--left"></span>
+            <span class="mouse-ear mouse-ear--right"></span>
+            <span class="mouse-face">
+              <span class="mouse-brow mouse-brow--left"></span>
+              <span class="mouse-brow mouse-brow--right"></span>
+              <span class="mouse-eye mouse-eye--left"></span>
+              <span class="mouse-eye mouse-eye--right"></span>
+              <span class="mouse-snout"></span>
+              <span class="mouse-whisker mouse-whisker--one"></span>
+              <span class="mouse-whisker mouse-whisker--two"></span>
+            </span>
+            <span class="mouse-tie"></span>
+          </div>
+          <div class="title-block">
+            <p class="eyebrow">映写技師ジェームス・上映番号 1928½</p>
+            <h1>手鳥州</h1>
+            <p class="roman-title">TE・TO・RI・SU</p>
+          </div>
+        </div>
+        <div class="header-actions">
+          <details class="music-menu" data-music-menu>
+            <summary aria-label="BGMを選ぶ">伴奏 ♪</summary>
+            <div class="music-popover">
+              <p class="music-heading">ジェームスの伴奏盤</p>
+              <label class="music-field">
+                <span>楽曲</span>
+                <select data-bgm-select aria-label="BGMの楽曲"></select>
+              </label>
+              <label class="music-field music-volume">
+                <span>音量 <output data-bgm-volume-value>34</output></span>
+                <input
+                  type="range"
+                  min="0"
+                  max="100"
+                  step="1"
+                  value="34"
+                  data-bgm-volume
+                  aria-label="BGMの音量"
+                />
+              </label>
+              <div class="music-buttons">
+                <button type="button" data-bgm-toggle aria-pressed="false">
+                  <span data-bgm-toggle-label>伴奏を休む</span>
+                </button>
+                <button type="button" data-bgm-file>手持ち曲</button>
+              </div>
+              <p class="music-now" data-bgm-now>上映開始で再生します</p>
+            </div>
+          </details>
+          <button
+            class="sound-toggle"
+            type="button"
+            data-sound-toggle
+            aria-pressed="false"
+            aria-label="音を消す"
+          >
+            音 <span data-sound-state>あり</span><span class="sound-key">M</span>
+          </button>
+          <button
+            class="pause-toggle"
+            id="pauseButton"
+            type="button"
+            aria-pressed="false"
+            aria-label="一時停止"
+          >
+            <span id="pauseButtonLabel">休止</span><span id="pauseButtonKey">P</span>
+          </button>
+          <div class="status-pill" id="statusPill">
+            <span class="status-dot"></span>
+            <span id="statusText">上映中</span>
+          </div>
+        </div>
+      </header>
+
+      <div class="legal-ribbon" aria-hidden="true">
+        <span>ジェームス映写室</span>
+        <span>今夜もフィルムは回ります</span>
+        <span>積み木喜劇・全二十段</span>
+      </div>
+
+      <section class="game-layout" aria-label="ゲーム画面">
+        <div class="board-frame">
+          <div class="board-topline">
+            <span>十列 × 二十段</span>
+            <span id="pieceLabel">出演中 / —</span>
+          </div>
+          <canvas
+            id="gameCanvas"
+            width="360"
+            height="720"
+            aria-label="10列20行の落ち物パズル盤面"
+          ></canvas>
+          <div class="board-corner board-corner--tl" aria-hidden="true"></div>
+          <div class="board-corner board-corner--tr" aria-hidden="true"></div>
+          <div class="board-corner board-corner--bl" aria-hidden="true"></div>
+          <div class="board-corner board-corner--br" aria-hidden="true"></div>
+          <p class="board-caption">毎秒二十四齣・手回し上映</p>
+        </div>
+
+        <aside class="side-panel" aria-label="ゲーム情報">
+          <div class="info-card piece-card">
+            <p class="info-label">次の出演</p>
+            <canvas
+              id="nextCanvas"
+              width="152"
+              height="112"
+              aria-label="次のミノ"
+            ></canvas>
+          </div>
+
+          <div class="info-card piece-card">
+            <p class="info-label">出演保留</p>
+            <canvas
+              id="holdCanvas"
+              width="152"
+              height="112"
+              aria-label="ホールド中のミノ"
+            ></canvas>
+          </div>
+
+          <div class="info-card stat-card">
+            <div class="stat-item stat-item--score">
+              <p class="info-label">得点</p>
+              <p class="stat-value" id="scoreValue">000000</p>
+            </div>
+            <div class="stat-item">
+              <p class="info-label">消去</p>
+              <p class="stat-value" id="linesValue">000</p>
+            </div>
+            <div class="stat-item">
+              <p class="info-label">幕</p>
+              <p class="stat-value" id="levelValue">01</p>
+            </div>
+            <div class="stat-item">
+              <p class="info-label">上映時間</p>
+              <p class="stat-value" id="timeValue">00:00</p>
+            </div>
+          </div>
+
+          <div class="info-card controls-card">
+            <p class="info-label">ピアノ式操作盤</p>
+            <dl class="key-list">
+              <div>
+                <dt><kbd>←</kbd><kbd>→</kbd></dt>
+                <dd>左右へ</dd>
+              </div>
+              <div>
+                <dt><kbd>↓</kbd></dt>
+                <dd>少し落とす</dd>
+              </div>
+              <div>
+                <dt><kbd>↑</kbd><kbd>X</kbd></dt>
+                <dd>右回し</dd>
+              </div>
+              <div>
+                <dt><kbd>Z</kbd></dt>
+                <dd>左回し</dd>
+              </div>
+              <div>
+                <dt><kbd>SPACE</kbd></dt>
+                <dd>一気に落とす</dd>
+              </div>
+              <div>
+                <dt><kbd>C</kbd><kbd>SHIFT</kbd></dt>
+                <dd>出演保留</dd>
+              </div>
+              <div>
+                <dt><kbd>P</kbd><kbd>ESC</kbd></dt>
+                <dd>休止・再開</dd>
+              </div>
+              <div>
+                <dt><kbd>R</kbd></dt>
+                <dd>巻き戻し</dd>
+              </div>
+              <div>
+                <dt><kbd>M</kbd></dt>
+                <dd>音を切替</dd>
+              </div>
+            </dl>
+          </div>
+        </aside>
+      </section>
+
+      <section class="touch-controls" id="touchControls" aria-label="タッチ操作盤">
+        <button type="button" data-touch-action="hold">
+          <span class="touch-symbol">HOLD</span><span class="touch-label">保留</span>
+        </button>
+        <button type="button" data-touch-action="rotate-counterclockwise">
+          <span class="touch-symbol" aria-hidden="true">↺</span
+          ><span class="touch-label">左回し</span>
+        </button>
+        <button type="button" data-touch-action="rotate-clockwise">
+          <span class="touch-symbol" aria-hidden="true">↻</span
+          ><span class="touch-label">右回し</span>
+        </button>
+        <button type="button" data-touch-action="pause">
+          <span class="touch-symbol">Ⅱ</span><span class="touch-label">休止</span>
+        </button>
+        <button type="button" data-touch-action="left">
+          <span class="touch-symbol" aria-hidden="true">◀</span
+          ><span class="touch-label">左</span>
+        </button>
+        <button type="button" data-touch-action="soft-drop">
+          <span class="touch-symbol" aria-hidden="true">▼</span
+          ><span class="touch-label">下</span>
+        </button>
+        <button type="button" data-touch-action="right">
+          <span class="touch-symbol" aria-hidden="true">▶</span
+          ><span class="touch-label">右</span>
+        </button>
+        <button class="touch-hard-drop" type="button" data-touch-action="hard-drop">
+          <span class="touch-symbol">DROP</span
+          ><span class="touch-label">一気落とし</span>
+        </button>
+      </section>
+
+      <footer class="game-footer">
+        <p>映写技師ジェームスより、よい夜を</p>
+        <button id="restartButton" type="button">巻き戻す <span>R</span></button>
+      </footer>
+    </main>
+
+    <div
+      class="pause-panel"
+      id="pausePanel"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="pauseHeading"
+      hidden
+    >
+      <p class="eyebrow" id="pauseReason">映写機を一度止めています</p>
+      <h2 id="pauseHeading">休憩</h2>
+      <p>盤面と上映時間は止まったままです。</p>
+      <div class="overlay-buttons">
+        <button id="resumeButton" type="button">上映を続ける</button>
+        <button id="pauseRestartButton" type="button">最初から</button>
+      </div>
+    </div>
+
+    <div
+      class="game-over-panel"
+      id="gameOverPanel"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="gameOverHeading"
+      hidden
+    >
+      <p class="eyebrow">ジェームスが映写機を止めました</p>
+      <h2 id="gameOverHeading">おしまい</h2>
+      <p class="new-best" id="newBestBanner" hidden>自己新記録！</p>
+      <dl class="result-grid" aria-label="今回の成績">
+        <div>
+          <dt>得点</dt>
+          <dd id="resultScore">000000</dd>
+        </div>
+        <div>
+          <dt>消去</dt>
+          <dd id="resultLines">000</dd>
+        </div>
+        <div>
+          <dt>幕</dt>
+          <dd id="resultLevel">01</dd>
+        </div>
+        <div>
+          <dt>上映時間</dt>
+          <dd id="resultTime">00:00</dd>
+        </div>
+      </dl>
+      <p class="result-best">最高得点 <strong id="resultBestScore">000000</strong></p>
+      <button id="overlayRestartButton" type="button">もう一幕</button>
+    </div>
+
+    <aside class="orientation-notice" aria-label="画面方向の案内">
+      <div class="phone-icon" aria-hidden="true"><span></span></div>
+      <p>映写機を縦向きにすると<br />快適に上映できます</p>
+    </aside>
+
+    <input
+      id="bgmFileInput"
+      type="file"
+      accept="audio/*,.mp3,.m4a,.wav,.ogg,.flac,.aac"
+      hidden
+    />
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
