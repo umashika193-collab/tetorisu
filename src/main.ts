@@ -2,6 +2,7 @@ import { VintageAudio } from "./audio";
 import { BgmPlayer, BUILT_IN_BGM, type BgmSnapshot } from "./bgm";
 import { FallingBlockGame } from "./game";
 import { KeyboardInput, TouchInput } from "./input";
+import { setupPwaInstall } from "./pwa";
 import { PersonalBestStore, type GameRecord } from "./records";
 import { GameRenderer } from "./renderer";
 import type { GameSnapshot } from "./types";
@@ -84,6 +85,10 @@ const bgmNowLabels = Array.from(
 const musicMenus = Array.from(
   document.querySelectorAll<HTMLDetailsElement>("[data-music-menu]"),
 );
+const pwaInstallButton = requireElement<HTMLButtonElement>("#pwaInstallButton");
+const pwaInstallDialog = requireElement<HTMLDialogElement>("#pwaInstallDialog");
+const pwaInstallHelp = requireElement<HTMLElement>("#pwaInstallHelp");
+const pwaInstallClose = requireElement<HTMLButtonElement>("#pwaInstallClose");
 
 const game = new FallingBlockGame();
 const renderer = new GameRenderer(gameCanvas, nextCanvas, holdCanvas);
@@ -101,6 +106,12 @@ let previousAudioSnapshot = game.getSnapshot();
 populateBgmSelects();
 bgm.setMasterMuted(audio.isMuted());
 const unsubscribeFromBgm = bgm.subscribe(updateBgmControls);
+const destroyPwaInstall = setupPwaInstall({
+  button: pwaInstallButton,
+  dialog: pwaInstallDialog,
+  help: pwaInstallHelp,
+  closeButton: pwaInstallClose,
+});
 
 function updateSoundControls(): void {
   const supported = audio.isSupported();
@@ -582,6 +593,7 @@ window.addEventListener("beforeunload", () => {
   touchInput?.destroy();
   audio.destroy();
   bgm.destroy();
+  destroyPwaInstall();
   unsubscribeFromBgm();
   soundButtons.forEach((button) => {
     button.removeEventListener("click", handleSoundButtonClick);

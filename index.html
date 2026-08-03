@@ -11,6 +11,11 @@
       content="古いカートゥーン映画のような、オリジナル落ち物パズルゲーム『手鳥州』"
     />
     <meta name="theme-color" content="#ead9b8" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="手鳥州" />
+    <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png" />
+    <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png" />
     <title>手鳥州</title>
   </head>
   <body class="title-open">
@@ -19,6 +24,9 @@
     <section class="title-screen" id="titleScreen" aria-labelledby="titleScreenName">
       <div class="title-card">
         <div class="title-audio-tools">
+          <button class="install-app-button" id="pwaInstallButton" type="button" hidden>
+            アプリを入れる
+          </button>
           <details class="music-menu music-menu--title" data-music-menu>
             <summary aria-label="BGMを選ぶ">伴奏 ♪</summary>
             <div class="music-popover">
@@ -360,6 +368,19 @@
       <p class="result-best">最高得点 <strong id="resultBestScore">000000</strong></p>
       <button id="overlayRestartButton" type="button">もう一幕</button>
     </div>
+
+    <dialog
+      class="pwa-install-dialog"
+      id="pwaInstallDialog"
+      aria-labelledby="pwaInstallHeading"
+    >
+      <p class="eyebrow">ジェームスを端末へ</p>
+      <h2 id="pwaInstallHeading">アプリとして追加</h2>
+      <p id="pwaInstallHelp">
+        ブラウザーのメニューから「ホーム画面に追加」を選んでください。
+      </p>
+      <button id="pwaInstallClose" type="button">わかった</button>
+    </dialog>
 
     <aside class="orientation-notice" aria-label="画面方向の案内">
       <div class="phone-icon" aria-hidden="true"><span></span></div>

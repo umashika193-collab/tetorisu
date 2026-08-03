@@ -327,6 +327,26 @@ h1 {
   font-size: 0.55rem;
 }
 
+.install-app-button {
+  padding: 8px 10px;
+  transform: rotate(1deg);
+  color: var(--paper-light);
+  border: 2px solid var(--ink);
+  background: var(--blue);
+  box-shadow: 3px 3px 0 var(--ink);
+  font-size: 0.55rem;
+  white-space: nowrap;
+}
+
+.install-app-button:hover {
+  transform: translate(1px, 1px) rotate(-1deg);
+  box-shadow: 2px 2px 0 var(--ink);
+}
+
+.install-app-button[hidden] {
+  display: none;
+}
+
 .sound-toggle:hover {
   transform: translate(1px, 1px) rotate(1deg);
   box-shadow: 2px 2px 0 var(--ink);
@@ -1014,6 +1034,48 @@ body.title-open {
   background: var(--ink);
   box-shadow: 15px 15px 0 rgba(164, 58, 45, 0.75);
   text-align: center;
+}
+
+.pwa-install-dialog {
+  z-index: 70;
+  width: min(calc(100% - 40px), 430px);
+  padding: 34px;
+  transform: rotate(-1deg);
+  color: var(--paper-light);
+  border: 5px solid var(--paper-light);
+  outline: 7px solid var(--ink);
+  background: var(--ink);
+  box-shadow: 15px 15px 0 rgba(53, 94, 104, 0.78);
+  text-align: center;
+}
+
+.pwa-install-dialog::backdrop {
+  background: rgba(28, 23, 18, 0.72);
+  backdrop-filter: blur(2px);
+}
+
+.pwa-install-dialog h2 {
+  position: relative;
+  margin-top: 13px;
+  color: var(--paper-light);
+  font-size: clamp(2.4rem, 10vw, 4rem);
+  letter-spacing: -0.08em;
+  text-shadow: 4px 4px 0 var(--blue);
+}
+
+.pwa-install-dialog > p:not(.eyebrow) {
+  margin: 23px 0;
+  color: var(--paper-dark);
+  font-size: 0.72rem;
+  line-height: 1.8;
+}
+
+.pwa-install-dialog button {
+  width: 100%;
+  color: var(--ink);
+  border-color: var(--paper-light);
+  background: var(--paper-light);
+  box-shadow: 4px 4px 0 var(--blue);
 }
 
 .game-over-panel[hidden],

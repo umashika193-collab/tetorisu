@@ -46,6 +46,7 @@ function Get-ContentType([string]$Path) {
     ".js" { return "text/javascript; charset=utf-8" }
     ".css" { return "text/css; charset=utf-8" }
     ".json" { return "application/json; charset=utf-8" }
+    ".webmanifest" { return "application/manifest+json; charset=utf-8" }
     ".png" { return "image/png" }
     ".jpg" { return "image/jpeg" }
     ".jpeg" { return "image/jpeg" }
