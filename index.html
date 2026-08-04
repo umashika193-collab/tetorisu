@@ -93,6 +93,32 @@
       </div>
     </section>
 
+    <div class="james-celebration" id="jamesCelebration">
+      <div class="james-celebration__scene" aria-hidden="true">
+        <div class="james-celebration__portrait">
+          <span class="james-celebration__sprite"></span>
+        </div>
+        <div class="james-celebration__placard">
+          <span class="james-celebration__kicker">祝・得点突破</span>
+          <strong><span id="jamesMilestoneScore">5,000</span>点！</strong>
+          <span class="james-celebration__cheer">よい調子です</span>
+        </div>
+      </div>
+      <span
+        class="visually-hidden"
+        id="jamesCelebrationAnnouncement"
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+      ></span>
+    </div>
+
+    <aside class="james-test-panel" id="jamesTestPanel" aria-label="演出テスト" hidden>
+      <span>TEST MODE</span>
+      <button id="jamesTestButton" type="button">ジェームス</button>
+      <button id="sugakoTestButton" type="button">スガーコ</button>
+    </aside>
+
     <main class="app-shell">
       <header class="game-header">
         <div class="brand-lockup">
@@ -113,7 +139,10 @@
           <div class="title-block">
             <p class="eyebrow">映写技師ジェームス・上映番号 1928½</p>
             <h1>手鳥州</h1>
-            <p class="roman-title">TE・TO・RI・SU</p>
+            <p class="roman-title">
+              TE・TO・RI・SU
+              <span class="app-version" data-app-version>v0.3.1</span>
+            </p>
           </div>
         </div>
         <div class="header-actions">

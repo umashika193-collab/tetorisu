@@ -71,6 +71,250 @@ body::after {
   pointer-events: none;
 }
 
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.james-celebration {
+  position: fixed;
+  z-index: 45;
+  top: clamp(128px, 18vh, 170px);
+  left: 0;
+  width: 100%;
+  pointer-events: none;
+}
+
+.james-celebration__scene {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: max-content;
+  opacity: 0;
+  filter: drop-shadow(5px 6px 0 rgba(28, 23, 18, 0.22));
+}
+
+.james-celebration--left .james-celebration__scene {
+  left: 0;
+  flex-direction: row;
+  transform: translate(-110%, -50%);
+}
+
+.james-celebration--right .james-celebration__scene {
+  right: 0;
+  flex-direction: row-reverse;
+  transform: translate(110%, -50%);
+}
+
+.james-celebration--visible.james-celebration--left .james-celebration__scene {
+  animation: james-peek-left 3.2s cubic-bezier(0.22, 0.82, 0.26, 1) both;
+}
+
+.james-celebration--visible.james-celebration--right .james-celebration__scene {
+  animation: james-peek-right 3.2s cubic-bezier(0.22, 0.82, 0.26, 1) both;
+}
+
+.james-celebration__portrait {
+  position: relative;
+  width: 112px;
+  height: 192px;
+}
+
+.james-celebration__sprite {
+  display: block;
+  width: 96px;
+  height: 192px;
+  margin: 0 auto;
+  background-image: url("../assets/animations/james-wave-sprite-v2.png");
+  background-repeat: no-repeat;
+  background-position: 0 0;
+  background-size: 400% 100%;
+  filter: saturate(0.92) contrast(1.02);
+}
+
+.james-celebration--sugako .james-celebration__sprite {
+  background-image: url("../assets/animations/sugako-encourage-sprite.png");
+}
+
+.james-celebration--visible .james-celebration__sprite {
+  animation: james-sprite-wave 3.2s steps(1, end) both;
+}
+
+.james-celebration__placard {
+  position: relative;
+  display: grid;
+  min-width: 152px;
+  padding: 12px 16px 13px;
+  transform: rotate(-2deg);
+  border: 4px solid var(--ink);
+  border-radius: 7px 12px 8px 10px;
+  color: var(--ink);
+  background: var(--paper-light);
+  box-shadow: 5px 5px 0 var(--red);
+  text-align: center;
+}
+
+.james-celebration--right .james-celebration__placard {
+  transform: rotate(2deg);
+  box-shadow: -5px 5px 0 var(--blue);
+}
+
+.james-celebration__placard::before {
+  position: absolute;
+  top: 50%;
+  left: -13px;
+  width: 20px;
+  height: 20px;
+  transform: translateY(-50%) rotate(45deg);
+  border-bottom: 4px solid var(--ink);
+  border-left: 4px solid var(--ink);
+  background: var(--paper-light);
+  content: "";
+}
+
+.james-celebration--right .james-celebration__placard::before {
+  right: -13px;
+  left: auto;
+  transform: translateY(-50%) rotate(225deg);
+}
+
+.james-celebration__kicker,
+.james-celebration__cheer {
+  color: var(--faded);
+  font-size: 0.52rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+.james-celebration__placard strong {
+  margin: 4px 0 3px;
+  color: var(--red-dark);
+  font-family: "Archivo Black", "Yu Mincho", serif;
+  font-size: 1.45rem;
+  letter-spacing: -0.07em;
+}
+
+.james-test-panel {
+  position: fixed;
+  z-index: 55;
+  right: 18px;
+  bottom: 18px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 8px 8px 12px;
+  transform: rotate(-1deg);
+  border: 2px dashed var(--paper-light);
+  color: var(--paper-light);
+  background: var(--blue);
+  box-shadow: 4px 4px 0 var(--ink);
+}
+
+.james-test-panel[hidden],
+body.title-open .james-test-panel {
+  display: none;
+}
+
+.james-test-panel > span {
+  font-size: 0.48rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+}
+
+.james-test-panel button {
+  padding: 7px 9px;
+  transform: none;
+  border-width: 2px;
+  box-shadow: 2px 2px 0 var(--ink);
+  font-size: 0.52rem;
+}
+
+.james-test-panel button:hover {
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0 var(--ink);
+}
+
+@keyframes james-peek-left {
+  0% {
+    transform: translate(-110%, -50%) rotate(-4deg);
+    opacity: 0;
+  }
+  18%,
+  72% {
+    transform: translate(8px, -50%) rotate(0);
+    opacity: 1;
+  }
+  78% {
+    transform: translate(2px, -54%) rotate(-2deg);
+    opacity: 1;
+  }
+  84% {
+    transform: translate(8px, -50%) rotate(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-110%, -50%) rotate(-4deg);
+    opacity: 0;
+  }
+}
+
+@keyframes james-peek-right {
+  0% {
+    transform: translate(110%, -50%) rotate(4deg);
+    opacity: 0;
+  }
+  18%,
+  72% {
+    transform: translate(-8px, -50%) rotate(0);
+    opacity: 1;
+  }
+  78% {
+    transform: translate(-2px, -54%) rotate(2deg);
+    opacity: 1;
+  }
+  84% {
+    transform: translate(-8px, -50%) rotate(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(110%, -50%) rotate(4deg);
+    opacity: 0;
+  }
+}
+
+@keyframes james-sprite-wave {
+  0%,
+  22% {
+    background-position: 0 0;
+  }
+
+  23%,
+  38%,
+  55%,
+  72% {
+    background-position: 33.333% 0;
+  }
+
+  39%,
+  54%,
+  56%,
+  71% {
+    background-position: 66.667% 0;
+  }
+
+  73%,
+  100% {
+    background-position: 100% 0;
+  }
+}
+
 button,
 kbd {
   font: inherit;
@@ -938,6 +1182,19 @@ body.title-open {
   letter-spacing: 0.56em;
 }
 
+.app-version {
+  display: inline-block;
+  margin-left: 0.8em;
+  padding: 2px 5px;
+  transform: translateY(-1px) rotate(-1deg);
+  border: 1px solid currentColor;
+  border-radius: 2px;
+  font-family: "Archivo Black", sans-serif;
+  font-size: 0.68em;
+  letter-spacing: 0.08em;
+  vertical-align: middle;
+}
+
 .title-lead {
   margin: 34px 0 0 5px;
   padding-top: 21px;
@@ -1611,12 +1868,39 @@ body.title-open {
     animation: none;
   }
 
+  .james-celebration--visible.james-celebration--left .james-celebration__scene {
+    transform: translate(8px, -50%);
+    animation: james-celebration-fade 3.2s linear both;
+  }
+
+  .james-celebration--visible.james-celebration--right .james-celebration__scene {
+    transform: translate(-8px, -50%);
+    animation: james-celebration-fade 3.2s linear both;
+  }
+
+  .james-celebration--visible .james-celebration__sprite {
+    background-position: 0 0;
+    animation: none;
+  }
+
   .title-screen {
     transition: none;
   }
 
   .title-screen--leaving {
     transform: none;
+  }
+}
+
+@keyframes james-celebration-fade {
+  0%,
+  100% {
+    opacity: 0;
+  }
+
+  4%,
+  88% {
+    opacity: 1;
   }
 }
 

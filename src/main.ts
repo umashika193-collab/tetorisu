@@ -2,6 +2,11 @@ import { VintageAudio } from "./audio";
 import { BgmPlayer, BUILT_IN_BGM, type BgmSnapshot } from "./bgm";
 import { FallingBlockGame } from "./game";
 import { KeyboardInput, TouchInput } from "./input";
+import {
+  getScoreMilestone,
+  MilestoneCelebration,
+  type MilestoneMascot,
+} from "./milestone";
 import { setupPwaInstall } from "./pwa";
 import { PersonalBestStore, type GameRecord } from "./records";
 import { GameRenderer } from "./renderer";
@@ -89,12 +94,33 @@ const pwaInstallButton = requireElement<HTMLButtonElement>("#pwaInstallButton");
 const pwaInstallDialog = requireElement<HTMLDialogElement>("#pwaInstallDialog");
 const pwaInstallHelp = requireElement<HTMLElement>("#pwaInstallHelp");
 const pwaInstallClose = requireElement<HTMLButtonElement>("#pwaInstallClose");
+const jamesCelebrationElement = requireElement<HTMLElement>("#jamesCelebration");
+const jamesMilestoneScore = requireElement<HTMLElement>("#jamesMilestoneScore");
+const jamesCelebrationAnnouncement = requireElement<HTMLElement>(
+  "#jamesCelebrationAnnouncement",
+);
+const jamesTestPanel = requireElement<HTMLElement>("#jamesTestPanel");
+const jamesTestButton = requireElement<HTMLButtonElement>("#jamesTestButton");
+const sugakoTestButton = requireElement<HTMLButtonElement>("#sugakoTestButton");
+const appVersionLabels = Array.from(
+  document.querySelectorAll<HTMLElement>("[data-app-version]"),
+);
+
+for (const label of appVersionLabels) {
+  label.textContent = `v${__APP_VERSION__}`;
+}
 
 const game = new FallingBlockGame();
 const renderer = new GameRenderer(gameCanvas, nextCanvas, holdCanvas);
 const audio = new VintageAudio();
 const bgm = new BgmPlayer();
 const records = new PersonalBestStore();
+const jamesCelebration = new MilestoneCelebration(
+  jamesCelebrationElement,
+  jamesMilestoneScore,
+  jamesCelebrationAnnouncement,
+);
+const isJamesTestMode = new URLSearchParams(window.location.search).has("james-test");
 let hasStarted = false;
 let isPaused = false;
 let personalBest = records.load();
@@ -102,6 +128,12 @@ let hasHandledGameOver = false;
 let touchInput: TouchInput | null = null;
 let previousTime = performance.now();
 let previousAudioSnapshot = game.getSnapshot();
+let jamesTestMilestoneIndex = 0;
+
+if (isJamesTestMode) {
+  document.body.classList.add("james-test-mode");
+  jamesTestPanel.hidden = false;
+}
 
 populateBgmSelects();
 bgm.setMasterMuted(audio.isMuted());
@@ -267,6 +299,7 @@ function restart(): void {
 
   setPaused(false);
   game.restart();
+  jamesCelebration.reset();
   hasHandledGameOver = false;
   newBestBanner.hidden = true;
   previousAudioSnapshot = game.getSnapshot();
@@ -274,6 +307,16 @@ function restart(): void {
   audio.playRestart();
   updateInterface(previousAudioSnapshot);
 }
+
+function previewNextMilestone(mascot?: MilestoneMascot): void {
+  const milestone = getScoreMilestone(jamesTestMilestoneIndex);
+  jamesTestMilestoneIndex = (jamesTestMilestoneIndex + 1) % 8;
+  jamesCelebration.preview(milestone, mascot);
+}
+
+const previewRandomMilestone = (): void => previewNextMilestone();
+const previewJamesMilestone = (): void => previewNextMilestone("james");
+const previewSugakoMilestone = (): void => previewNextMilestone("sugako");
 
 function duringShow(action: () => void): () => void {
   return () => {
@@ -328,6 +371,7 @@ function startShow(): void {
   isPaused = false;
   hasHandledGameOver = false;
   game.restart();
+  jamesCelebration.reset();
   previousAudioSnapshot = game.getSnapshot();
   previousTime = performance.now();
   bgm.start();
@@ -340,6 +384,10 @@ function startShow(): void {
   window.setTimeout(() => {
     titleScreen.hidden = true;
   }, 320);
+
+  if (isJamesTestMode) {
+    window.setTimeout(previewRandomMilestone, 520);
+  }
 }
 
 function handleTitleKeyDown(event: KeyboardEvent): void {
@@ -382,6 +430,8 @@ overlayRestartButton.addEventListener("click", restart);
 pauseRestartButton.addEventListener("click", restart);
 pauseButton.addEventListener("click", togglePause);
 resumeButton.addEventListener("click", togglePause);
+jamesTestButton.addEventListener("click", previewJamesMilestone);
+sugakoTestButton.addEventListener("click", previewSugakoMilestone);
 soundButtons.forEach((button) => {
   button.addEventListener("click", handleSoundButtonClick);
 });
@@ -525,6 +575,9 @@ function frame(currentTime: number): void {
   }
   const snapshot = game.getSnapshot();
   syncGameSounds(snapshot);
+  if (hasStarted && !isPaused && !snapshot.isGameOver) {
+    jamesCelebration.update(snapshot.score);
+  }
   renderer.draw(snapshot);
   updateInterface(snapshot);
   requestAnimationFrame(frame);
@@ -594,6 +647,7 @@ window.addEventListener("beforeunload", () => {
   audio.destroy();
   bgm.destroy();
   destroyPwaInstall();
+  jamesCelebration.destroy();
   unsubscribeFromBgm();
   soundButtons.forEach((button) => {
     button.removeEventListener("click", handleSoundButtonClick);
@@ -619,5 +673,7 @@ window.addEventListener("beforeunload", () => {
   pauseButton.removeEventListener("click", togglePause);
   resumeButton.removeEventListener("click", togglePause);
   pauseRestartButton.removeEventListener("click", restart);
+  jamesTestButton.removeEventListener("click", previewJamesMilestone);
+  sugakoTestButton.removeEventListener("click", previewSugakoMilestone);
   window.removeEventListener("keydown", handleTitleKeyDown, { capture: true });
 });

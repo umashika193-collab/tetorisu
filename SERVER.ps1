@@ -2,6 +2,7 @@ param(
   [string]$Root = (Join-Path $PSScriptRoot "dist"),
   [int]$Port = 5173,
   [switch]$Lan,
+  [switch]$JamesTest,
   [switch]$NoBrowser
 )
 
@@ -74,6 +75,9 @@ function Write-SimpleResponse(
 }
 
 $localUrl = "http://127.0.0.1:$selectedPort/"
+if ($JamesTest) {
+  $localUrl += "?james-test=1"
+}
 $host.UI.RawUI.WindowTitle = "TETORISU Server - Close this window to stop"
 Write-Host ""
 Write-Host "  TETORISU is now showing" -ForegroundColor Yellow
